@@ -1,10 +1,10 @@
-<?php 
+<?php
 function property_gallery_add_metabox(){
 	add_meta_box(
 		'post_custom_gallery',
 		'Gallery',
 		'property_gallery_metabox_callback',
-		'house', // Change post type name
+		'products', // Change post type name
 		'normal',
 		'core'
 	);
@@ -62,7 +62,7 @@ function property_gallery_metabox_callback(){
 
 function property_gallery_styles_scripts(){
     global $post;
-    if( 'product' != $post->post_type )
+    if( 'products' != $post->post_type )
         return;
     ?>  
     <style type="text/css">
@@ -233,7 +233,7 @@ function property_gallery_save( $post_id ) {
 	}
 
 	// Correct post type
-	if ( 'house' != $_POST['post_type'] ) // here you can set the post type name
+	if ( 'products' != $_POST['post_type'] ) // here you can set the post type name
 		return;
 
 	if ( $_POST['gallery'] ){
@@ -257,4 +257,34 @@ function property_gallery_save( $post_id ) {
 	}
 }
 add_action( 'save_post', 'property_gallery_save' );
-?>
+
+function product_gallery(){
+	// $args = array( 'post_type' => 'products', 'posts_per_page' => -1);
+ //  $loop = new WP_Query( $args );
+ //  $for_wrap= '<div class="slider-for">';
+ //  while ( $loop->have_posts() ) : $loop->the_post();
+ //   $for.='';
+
+
+  // endwhile;
+
+	$currentPostId=get_the_ID();
+	$gallery = get_post_meta($currentPostId ,'gallery_data',true);		
+	if(isset($gallery['image_url']) && count($gallery['image_url'])>0){
+		$siderFor='<div class="slider-for">';
+		$siderNav='<div class="slider-nav">';
+			for($i=0;$i<count($gallery['image_url']);$i++){
+				$siderFor.='<div><img src="'.$gallery['image_url'][$i].'"></div>';
+				$siderNav.='<div><figure><img src="'.$gallery['image_url'][$i].'"></figure></div>';				
+			}
+
+			$siderFor.='</div>';
+			$siderNav.='</div>';
+
+			return $siderFor.$siderNav;
+
+	
+	}
+}
+add_shortcode('gallery_shortcode','product_gallery');
+	
