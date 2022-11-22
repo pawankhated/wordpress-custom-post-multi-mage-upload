@@ -1,4 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>product_gallery</title>
+	<link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
+	<link href="assets/css/productgallery.css" rel="stylesheet">
+	<link href="assets/css/slick.css" rel="stylesheet">
+	<link href="assets/css/slick-theme.min.css" rel="stylesheet">
+</head>
+<body>
+
 <?php
+
 function property_gallery_add_metabox(){
 	add_meta_box(
 		'post_custom_gallery',
@@ -65,153 +80,7 @@ function property_gallery_styles_scripts(){
     if( 'products' != $post->post_type )
         return;
     ?>  
-    <style type="text/css">
-	.gallery_area {
-		float:right;
-	}
-	.image_container {
-		float:left!important;
-		width: 100px;
-		background: url('https://i.hizliresim.com/dOJ6qL.png');
-		height: 100px;
-		background-repeat: no-repeat;
-		background-size: cover;
-		border-radius: 3px;
-		cursor: pointer;
-	}
-	.image_container img{
-		height: 100px;
-		width: 100px;
-		border-radius: 3px;
-	}
-	.clear {
-		clear:both;
-	}
-	#gallery_wrapper {
-		width: 100%;
-		height: auto;
-		position: relative;
-		display: inline-block;
-	}
-	#gallery_wrapper input[type=text] {
-		width:300px;
-	}
-	#gallery_wrapper .gallery_single_row {
-		float: left;
-		display:inline-block;
-		width: 100px;
-		position: relative;
-		margin-right: 8px;
-		margin-bottom: 20px;
-	}
-	.dolu {
-		display: inline-block!important;
-	}
-	#gallery_wrapper label {
-		padding:0 6px;
-	}
-	.button.remove {
-		background: none;
-		color: #f1f1f1;
-		position: absolute;
-		border: none;
-		top: 4px;
-		right: 7px;
-		font-size: 1.2em;
-		padding: 0px;
-		box-shadow: none;
-	}
-	.button.remove:hover {
-		background: none;
-		color: #fff;
-	}
-	.button.add {
-		background: #c3c2c2;
-		color: #ffffff;
-		border: none;
-		box-shadow: none;
-		width: 100px;
-		height: 100px;
-		line-height: 100px;
-		font-size: 4em;
-	}
-	.button.add:hover, .button.add:focus {
-		background: #e2e2e2;
-		box-shadow: none;
-		color: #0f88c1;
-		border: none;
-	}
-    </style>
-    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script>
-    <link href = "https://code.jquery.com/ui/1.10.4/themes/ui-lightness/jquery-ui.css" rel = "stylesheet">
-    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
-    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
-    <script type="text/javascript">
-        function remove_img(value) {
-            var parent=jQuery(value).parent().parent();
-            parent.remove();
-        }
-	var media_uploader = null;
-	function open_media_uploader_image(obj){
-		media_uploader = wp.media({
-			frame:    "post", 
-			state:    "insert", 
-			multiple: false
-		});
-		media_uploader.on("insert", function(){
-			var json = media_uploader.state().get("selection").first().toJSON();
-			var image_url = json.url;
-			var html = '<img class="gallery_img_img" src="'+image_url+'" height="55" width="55" onclick="open_media_uploader_image_this(this)"/>';
-			console.log(image_url);
-			jQuery(obj).append(html);
-			jQuery(obj).find('.meta_image_url').val(image_url);
-		});
-		media_uploader.open();
-	}
-	function open_media_uploader_image_this(obj){
-		media_uploader = wp.media({
-			frame:    "post", 
-			state:    "insert", 
-			multiple: false
-		});
-		media_uploader.on("insert", function(){
-			var json = media_uploader.state().get("selection").first().toJSON();
-			var image_url = json.url;
-			console.log(image_url);
-			jQuery(obj).attr('src',image_url);
-			jQuery(obj).siblings('.meta_image_url').val(image_url);
-		});
-		media_uploader.open();
-	}
-
-	function open_media_uploader_image_plus(){
-		media_uploader = wp.media({
-			frame:    "post", 
-			state:    "insert", 
-			multiple: true 
-		});
-		media_uploader.on("insert", function(){
-
-			var length = media_uploader.state().get("selection").length;
-			var images = media_uploader.state().get("selection").models
-
-			for(var i = 0; i < length; i++){
-				var image_url = images[i].changed.url;
-				var box = jQuery('#master_box').html();
-				jQuery(box).appendTo('#img_box_container');
-				var element = jQuery('#img_box_container .gallery_single_row:last-child').find('.image_container');
-				var html = '<img class="gallery_img_img" src="'+image_url+'" height="55" width="55" onclick="open_media_uploader_image_this(this)"/>';
-				element.append(html);
-				element.find('.meta_image_url').val(image_url);
-				console.log(image_url);		
-			}
-		});
-		media_uploader.open();
-	}
-	jQuery(function() {
-            jQuery("#img_box_container").sortable();
-        });
-    </script>
+    
     <?php
 }
 add_action( 'admin_head-post.php', 'property_gallery_styles_scripts' );
@@ -287,4 +156,42 @@ function product_gallery(){
 	}
 }
 add_shortcode('gallery_shortcode','product_gallery');
+
+// create shortcode gallery design
+function product_gallery(){
+
+
+	$currentPostId=get_the_ID();
+	$gallery = get_post_meta($currentPostId ,'gallery_data',true);		
+	if(isset($gallery['image_url']) && count($gallery['image_url'])>0){
+		$siderFor='<div class="slider-for">';
+		$siderNav='<div class="slider-nav">';
+			for($i=0;$i<count($gallery['image_url']);$i++){
+				$siderFor.='<div><img src="'.$gallery['image_url'][$i].'"></div>';
+				$siderNav.='<div><figure><img src="'.$gallery['image_url'][$i].'"></figure></div>';				
+			}
+             
+			$siderFor.='</div>';
+			$siderNav.='</div>';
+
+			return $siderFor.$siderNav;
+
+	
+	}
+	wp_reset_query();
+	wp_reset_postdata();
+}
+add_shortcode('gallery_shortcode','product_gallery');
+
+?>
+
+<script defer src="https://use.fontawesome.com/releases/v5.0.8/js/solid.js" integrity="sha384-+Ga2s7YBbhOD6nie0DzrZpJes+b2K1xkpKxTFFcx59QmVPaSA8c7pycsNaFwUK6l" crossorigin="anonymous"></script> 
+    <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/fontawesome.js" integrity="sha384-7ox8Q2yzO/uWircfojVuCQOZl+ZZBg2D2J5nkpLqzH1HY0C1dHlTKIbpRz/LG23c" crossorigin="anonymous"></script>
+    <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+	<script src="assets/js/productgallery.js"></script>
+	<script src="assets/js/slick.min.js"></script>
+</body>
+</html>
+
+
 	
